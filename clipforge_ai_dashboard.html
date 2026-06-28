@@ -1,0 +1,167 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.app { display: flex; height: 600px; background: var(--surface-0); border-radius: 12px; overflow: hidden; border: 0.5px solid var(--border); }
+.sidebar { width: 220px; min-width: 220px; background: var(--surface-1); border-right: 0.5px solid var(--border); display: flex; flex-direction: column; padding: 0; }
+.sidebar-logo { padding: 18px 16px 14px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.logo-icon { width: 28px; height: 28px; background: var(--fill-accent); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: var(--on-accent); font-size: 14px; }
+.logo-text { font-size: 15px; font-weight: 500; color: var(--text-primary); letter-spacing: -0.3px; }
+.logo-text span { color: var(--text-accent); }
+.sidebar-section { padding: 12px 8px 4px; }
+.sidebar-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; padding: 0 8px 6px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: var(--radius); cursor: pointer; font-size: 13.5px; color: var(--text-secondary); transition: background 0.1s; margin-bottom: 1px; }
+.nav-item:hover { background: var(--surface-2); color: var(--text-primary); }
+.nav-item.active { background: var(--bg-accent); color: var(--text-accent); }
+.nav-item i { font-size: 16px; width: 18px; }
+.nav-badge { margin-left: auto; font-size: 11px; background: var(--fill-accent); color: var(--on-accent); border-radius: 10px; padding: 1px 7px; font-weight: 500; }
+.sidebar-divider { height: 0.5px; background: var(--border); margin: 8px 16px; }
+.sidebar-bottom { margin-top: auto; padding: 12px 8px; border-top: 0.5px solid var(--border); }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { padding: 14px 24px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface-2); }
+.topbar-title { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); border: 0.5px solid var(--border-strong); background: var(--surface-2); color: var(--text-primary); font-size: 13px; cursor: pointer; font-family: var(--font-sans); transition: background 0.1s; }
+.btn:hover { background: var(--surface-1); }
+.btn-primary { background: var(--fill-accent); color: var(--on-accent); border-color: transparent; }
+.btn-primary:hover { background: var(--fill-accent-hover); }
+.content { flex: 1; overflow-y: auto; padding: 24px; }
+.section-title { font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.project-card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: border-color 0.15s; }
+.project-card:hover { border-color: var(--border-strong); }
+.project-thumb { width: 100%; height: 90px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+.thumb-purple { background: var(--bg-pro); }
+.thumb-blue { background: var(--bg-accent); }
+.thumb-teal { background: #E1F5EE; }
+.project-name { font-size: 13.5px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
+.project-meta { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+.project-status { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 10px; margin-top: 8px; }
+.status-done { background: var(--bg-success); color: var(--text-success); }
+.status-progress { background: var(--bg-warning); color: var(--text-warning); }
+.status-new { background: var(--bg-accent); color: var(--text-accent); }
+.clips-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.clip-card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; transition: border-color 0.15s; }
+.clip-card:hover { border-color: var(--border-strong); }
+.clip-thumb { height: 72px; background: var(--surface-1); display: flex; align-items: center; justify-content: center; position: relative; }
+.clip-duration { position: absolute; bottom: 5px; right: 6px; background: rgba(0,0,0,0.55); color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 4px; }
+.clip-info { padding: 8px 10px; }
+.clip-name { font-size: 12px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.clip-views { font-size: 11px; color: var(--text-muted); }
+.new-btn { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--radius); border: 0.5px dashed var(--border-strong); background: transparent; color: var(--text-muted); font-size: 13px; cursor: pointer; font-family: var(--font-sans); width: 100%; justify-content: center; transition: background 0.1s, color 0.1s; margin-top: 4px; }
+.new-btn:hover { background: var(--surface-1); color: var(--text-primary); }
+</style>
+
+<h2 class="sr-only">ClipForge AI dashboard — sidebar navigation, recent projects, and AI-generated clips</h2>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="ti ti-scissors" aria-hidden="true"></i></div>
+      <div class="logo-text">Clip<span>Forge</span> AI</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="nav-item active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Home</div>
+      <div class="nav-item"><i class="ti ti-folder" aria-hidden="true"></i> Projects <span class="nav-badge">3</span></div>
+      <div class="nav-item"><i class="ti ti-upload" aria-hidden="true"></i> Uploads</div>
+      <div class="nav-item"><i class="ti ti-sparkles" aria-hidden="true"></i> AI Clips</div>
+      <div class="nav-item"><i class="ti ti-template" aria-hidden="true"></i> Templates</div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Manage</div>
+      <div class="nav-item"><i class="ti ti-palette" aria-hidden="true"></i> Brand Kit</div>
+      <div class="nav-item"><i class="ti ti-chart-bar" aria-hidden="true"></i> Analytics</div>
+      <div class="nav-item"><i class="ti ti-credit-card" aria-hidden="true"></i> Billing</div>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="nav-item"><i class="ti ti-settings" aria-hidden="true"></i> Settings</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title">Recent projects</div>
+      <div class="topbar-actions">
+        <button class="btn"><i class="ti ti-search" aria-hidden="true"></i> Search</button>
+        <button class="btn btn-primary"><i class="ti ti-plus" aria-hidden="true"></i> New project</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="section-title">Projects</div>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-thumb thumb-purple"><i class="ti ti-microphone" style="color:var(--text-pro);font-size:28px" aria-hidden="true"></i></div>
+          <div class="project-name">Podcast Episode #25</div>
+          <div class="project-meta"><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> 2 hours ago</div>
+          <div class="project-status status-done"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i> Done</div>
+        </div>
+        <div class="project-card">
+          <div class="project-thumb thumb-blue"><i class="ti ti-brand-youtube" style="color:var(--text-accent);font-size:28px" aria-hidden="true"></i></div>
+          <div class="project-name">YouTube Video</div>
+          <div class="project-meta"><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Yesterday</div>
+          <div class="project-status status-progress"><i class="ti ti-loader" style="font-size:11px" aria-hidden="true"></i> Processing</div>
+        </div>
+        <div class="project-card">
+          <div class="project-thumb thumb-teal"><i class="ti ti-live-photo" style="color:#0F6E56;font-size:28px" aria-hidden="true"></i></div>
+          <div class="project-name">Livestream</div>
+          <div class="project-meta"><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Jun 25</div>
+          <div class="project-status status-new"><i class="ti ti-sparkles" style="font-size:11px" aria-hidden="true"></i> New clips</div>
+        </div>
+        <div class="project-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;border-style:dashed;min-height:160px;">
+          <i class="ti ti-plus" style="font-size:24px;color:var(--text-muted);margin-bottom:8px" aria-hidden="true"></i>
+          <div style="font-size:13px;color:var(--text-muted);">New project</div>
+        </div>
+      </div>
+
+      <div class="section-title">AI clips — podcast episode #25</div>
+      <div class="clips-row">
+        <div class="clip-card">
+          <div class="clip-thumb" style="background:var(--bg-pro);">
+            <i class="ti ti-player-play" style="font-size:22px;color:var(--text-pro)" aria-hidden="true"></i>
+            <span class="clip-duration">1:24</span>
+          </div>
+          <div class="clip-info">
+            <div class="clip-name">Best moment — intro hook</div>
+            <div class="clip-views">2.4k views</div>
+          </div>
+        </div>
+        <div class="clip-card">
+          <div class="clip-thumb" style="background:var(--bg-accent);">
+            <i class="ti ti-player-play" style="font-size:22px;color:var(--text-accent)" aria-hidden="true"></i>
+            <span class="clip-duration">0:58</span>
+          </div>
+          <div class="clip-info">
+            <div class="clip-name">Key insight clip</div>
+            <div class="clip-views">1.1k views</div>
+          </div>
+        </div>
+        <div class="clip-card">
+          <div class="clip-thumb" style="background:#E1F5EE;">
+            <i class="ti ti-player-play" style="font-size:22px;color:#0F6E56" aria-hidden="true"></i>
+            <span class="clip-duration">2:03</span>
+          </div>
+          <div class="clip-info">
+            <div class="clip-name">Viral moment #3</div>
+            <div class="clip-views">847 views</div>
+          </div>
+        </div>
+        <div class="clip-card">
+          <div class="clip-thumb" style="background:var(--bg-warning);">
+            <i class="ti ti-player-play" style="font-size:22px;color:var(--text-warning)" aria-hidden="true"></i>
+            <span class="clip-duration">1:37</span>
+          </div>
+          <div class="clip-info">
+            <div class="clip-name">Story highlight</div>
+            <div class="clip-views">612 views</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
